@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { CodeUploadForm } from './CodeUploadForm';
 import { RegisterForm } from './RegisterForm';
 import { CodeUploadContext, CodeUploadData } from '../context/CodeUploadContext';
+import { ResultCodeWon } from './ResultCodeWon';
+import { ResultCodeDidntWin } from './ResultCodeDidntWin';
 
-export type formTypes = "codeUpload" | "registerUser";
+export type formTypes = "codeUpload" | "registerUser" | "resultCodeWon" | "resultCodeDidntWin";
 
 export const Root = () => {
   const [codeUploadData, setCodeUploadData] = useState<CodeUploadData>();
@@ -15,10 +17,19 @@ export const Root = () => {
           setForm={setForm}
         />
       }
+
       {(form === "registerUser") &&
         <RegisterForm
           setForm={setForm}
         />
+      }
+
+      {(form === "resultCodeWon") &&
+        <ResultCodeWon />
+      }
+
+      {(form === "resultCodeDidntWin") &&
+        <ResultCodeDidntWin/>
       }
     </CodeUploadContext.Provider>
   );

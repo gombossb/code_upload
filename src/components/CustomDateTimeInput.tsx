@@ -1,3 +1,5 @@
+import { Field } from "formik";
+
 const mapMonthToHungarianText = (month: number /*1-12*/) => {
   const months: {[key: number]: string} = {
     1: "január",
@@ -17,14 +19,13 @@ const mapMonthToHungarianText = (month: number /*1-12*/) => {
   return months[month];
 }
 
-export const CustomDateTimeInput = ({minDate, maxDate, date, setDate}: {
+export const CustomDateTimeInput = ({minDate, maxDate, name}: {
   minDate: Date,
   maxDate: Date,
-  date: string,
-  setDate: () => any
+  name: string,
 }) => {
   if (maxDate < minDate){
-    return "Date error";
+    return "Date range error";
   }
 
   const days: {
@@ -46,7 +47,7 @@ export const CustomDateTimeInput = ({minDate, maxDate, date, setDate}: {
   }
 
   return (
-    <>
+    <Field name={name}>
       <label className="block">Vásárlás dátuma</label>
       <div className="grid grid-cols-3">
         <div>
@@ -82,6 +83,6 @@ export const CustomDateTimeInput = ({minDate, maxDate, date, setDate}: {
           </select>
         </div>
       </div>
-    </>
+    </Field>
   );
 }

@@ -2,20 +2,22 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { CustomDateTimeInput } from "./CustomDateTimeInput"
 import * as Yup from 'yup';
-import { Dispatch, SetStateAction, useContext, useEffect } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { formTypes } from "./Root";
 import { CodeUploadContext } from "../context/CodeUploadContext";
 import { apiUploadCode } from "../api/codeUpload";
+import { CodeUploadError } from "../api/types";
 
 
 export const CodeUploadForm = ({setForm}: {
   setForm: Dispatch<SetStateAction<formTypes>>
 }) => {
   const { codeUploadData, setCodeUploadData } = useContext(CodeUploadContext);
+  const [apiError, setApiError] = useState("");
 
   return (
     <Formik
-      initialValues={{ email: "", code: "", purchaseDate: "" }}
+      initialValues={{ email: "", code: "", purchase_time: "2023-07-21 10:00", apiError: "" }}
       validationSchema={Yup.object({
         email: Yup.string()
           .email('Érvénytelen email cím!')
@@ -25,27 +27,52 @@ export const CodeUploadForm = ({setForm}: {
           .max(8, '8 karakter hosszúnak kell lennie!')
           .matches(/[a-zA-Z0-9]{8}/, 'Érvénytelen karaktert tartalmaz!')
           .required('Nincs megadott kód!'),
-        // purchaseDate: Yup.string() // todo
+        // purchaseTime: Yup.string() // todo
         //   .max(20, 'Must be 20 characters or less')
         //   .required('Required'),
       })}
-      onSubmit={(values, { setSubmitting }) => {
+      onSubmit={(values) => {
+        // setErrors({});
+        // setTouched({}, false);
+
         setCodeUploadData({
           email: values.email,
           code: values.code,
-          purchaseDate: values.purchaseDate,
-          name: ""
+          purchase_time: values.purchase_time
         });
-        apiUploadCode(codeUploadData,
-          async (r) => console.log(r),
-          async (r) => console.log(r)
+        
+        apiUploadCode(
+          values,
+          async (response) => {
+            if (response.data?.data?.success){
+              setForm((response.data?.won) ? "resultCodeWon" : "resultCodeDidntWin");
+            } else {
+              setApiError("API hiba");
+            }
+          },
+          async (error) => {
+            if (error.response?.data){
+              const errorData = error.response?.data as CodeUploadError;
+              let emailNotFound = false;
+              let otherError = false;
+
+              errorData.errors.forEach(e => {
+                console.log(e)
+                if (e.code === "email:not_found")
+                  emailNotFound = true;
+                else
+                  otherError = true;
+              });
+
+              if (emailNotFound && !otherError)
+                setForm("registerUser");
+              else
+              setApiError("API hiba");
+            } else {
+              setApiError("API hiba");
+            }
+          }
         );
-        console.log(values)
-        // todo send code post
-        // if not regged:
-        setForm("registerUser") // and after regging send again
-        // else handle win message
-        // setSubmitting(false)
       }}
     >
       <Form>
@@ -79,9 +106,12 @@ export const CodeUploadForm = ({setForm}: {
           <CustomDateTimeInput
             minDate={new Date("2023-06-01")} // local
             maxDate={new Date("2023-08-31")} // local
-            date=""
-            setDate={() => {}}
+            name="purchase_time"
           />
+        </div>
+
+        <div className="text-red-700">
+          {apiError}
         </div>
 
         <button

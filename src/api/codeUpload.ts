@@ -1,19 +1,18 @@
-import { AxiosResponse } from "axios";
-import { CodeUploadData } from "../context/CodeUploadContext";
+import { AxiosError, AxiosResponse } from "axios";
 import axiosClient from "./axiosClient";
 
 export const apiUploadCode = (
-  data: CodeUploadData | undefined,
-  success: (r: AxiosResponse) => {},
-  fail: (r: any) => {}
+  data: {
+    email: string,
+    code: string,
+    purchase_time: string
+  },
+  success: (response: AxiosResponse) => Promise<void>,
+  fail: (error: AxiosError) => Promise<void>
 ) => {
   if (!data) return;
-  
-  axiosClient.post("/code/upload", {
-    email: data.email,
-    code: data.code,
-    purchase_time: data.purchaseDate
-  })
-  .then((response) => success(response))
-  .catch((error) => fail(error));
+
+  axiosClient.post("/code/upload", data)
+    .then(async (response) => await success(response))
+    .catch(async (error) => await fail(error));
 }
