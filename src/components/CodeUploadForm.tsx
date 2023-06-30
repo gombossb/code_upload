@@ -1,8 +1,8 @@
 
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import { CustomDateTimeInput } from "./CustomDateTimeInput"
+import { ErrorMessage, Field, FieldProps, Form, Formik } from "formik";
+import { CustomDateTimeInput, getDefaultDateTimeValue } from "./CustomDateTimeInput"
 import * as Yup from 'yup';
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
 import { formTypes } from "./Root";
 import { CodeUploadContext } from "../context/CodeUploadContext";
 import { apiUploadCode } from "../api/codeUpload";
@@ -17,7 +17,7 @@ export const CodeUploadForm = ({setForm}: {
 
   return (
     <Formik
-      initialValues={{ email: "", code: "", purchase_time: "2023-07-21 10:00", apiError: "" }}
+      initialValues={{ email: "", code: "", purchase_time: getDefaultDateTimeValue() }}
       validationSchema={Yup.object({
         email: Yup.string()
           .email('Érvénytelen email cím!')
@@ -27,14 +27,14 @@ export const CodeUploadForm = ({setForm}: {
           .max(8, '8 karakter hosszúnak kell lennie!')
           .matches(/[a-zA-Z0-9]{8}/, 'Érvénytelen karaktert tartalmaz!')
           .required('Nincs megadott kód!'),
-        // purchaseTime: Yup.string() // todo
-        //   .max(20, 'Must be 20 characters or less')
-        //   .required('Required'),
+        // purchaseTime: Yup.string()
+        //   .test(
+        //     "futureTest",
+        //     "A megadott idő nem lehet jövőbeli!",
+        //     value => new Date(value as string) <= new Date()
+        //   )
       })}
       onSubmit={(values) => {
-        // setErrors({});
-        // setTouched({}, false);
-
         setCodeUploadData({
           email: values.email,
           code: values.code,
@@ -57,7 +57,6 @@ export const CodeUploadForm = ({setForm}: {
               let otherError = false;
 
               errorData.errors.forEach(e => {
-                console.log(e)
                 if (e.code === "email:not_found")
                   emailNotFound = true;
                 else
@@ -113,6 +112,12 @@ export const CodeUploadForm = ({setForm}: {
         <div className="my-3 text-red-700">
           {apiError}
         </div>
+
+        {/* <Field name="debug">
+        {({ field, form, meta }: FieldProps) => (
+          <button type="button" onClick={() => {console.log(form.values)}}>debug</button>
+        )}
+        </Field> */}
 
         <button
           type="submit"

@@ -36,7 +36,7 @@ export const RegisterForm = ({setForm}: {
 
   return (
     <Formik
-      initialValues={{ email: codeUploadData?.email || "", name: "", acceptedTOS: false, apiError: "" }}
+      initialValues={{ email: codeUploadData?.email || "", name: "", acceptedTOS: false }}
       validationSchema={Yup.object({
         email: Yup.string()
           .email('Érvénytelen email cím!')
@@ -75,7 +75,7 @@ export const RegisterForm = ({setForm}: {
           },
           async (registerError) => {
             if (registerError.response?.data){
-              // todo
+              setApiError("Sikertelen regisztráció!");
             } else {
               setApiError("API hiba");
             }
