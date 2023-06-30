@@ -5,4 +5,4 @@
 - `npm install`
 
 ## Futtatás
-- `npm run dev`
+- `npm start`
