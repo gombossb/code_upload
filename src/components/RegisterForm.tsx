@@ -31,7 +31,7 @@ const CustomCheckbox = ({ name, children, ...props }: {
 export const RegisterForm = ({setForm}: {
   setForm: Dispatch<SetStateAction<formTypes>>
 }) => {
-  const { codeUploadData, setCodeUploadData } = useContext(CodeUploadContext);
+  const { codeUploadData } = useContext(CodeUploadContext);
   const [apiError, setApiError] = useState("");
 
   return (
@@ -65,10 +65,10 @@ export const RegisterForm = ({setForm}: {
                     setApiError("API hiba");
                   }
                 },
-                async (codeError) => {
+                async () => {
                   setApiError("API hiba");
                 }
-              )
+              );
             } else {
               setApiError("API hiba");
             }

@@ -1,5 +1,5 @@
 
-import { ErrorMessage, Field, FieldProps, Form, Formik } from "formik";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import { CustomDateTimeInput, getDefaultDateTimeValue } from "./CustomDateTimeInput"
 import * as Yup from 'yup';
 import { Dispatch, SetStateAction, useContext, useState } from "react";
@@ -12,7 +12,7 @@ import { CodeUploadError } from "../api/types";
 export const CodeUploadForm = ({setForm}: {
   setForm: Dispatch<SetStateAction<formTypes>>
 }) => {
-  const { codeUploadData, setCodeUploadData } = useContext(CodeUploadContext);
+  const { setCodeUploadData } = useContext(CodeUploadContext);
   const [apiError, setApiError] = useState("");
 
   return (
@@ -112,12 +112,6 @@ export const CodeUploadForm = ({setForm}: {
         <div className="my-3 text-red-700">
           {apiError}
         </div>
-
-        {/* <Field name="debug">
-        {({ field, form, meta }: FieldProps) => (
-          <button type="button" onClick={() => {console.log(form.values)}}>debug</button>
-        )}
-        </Field> */}
 
         <button
           type="submit"
