@@ -2,9 +2,10 @@ import { Dispatch, ReactNode, SetStateAction, useContext, useState } from "react
 import { formTypes } from "./Root";
 import { ErrorMessage, Field, Form, Formik, useField } from "formik";
 import * as Yup from 'yup';
-import { CodeUploadContext, CodeUploadData } from "../context/CodeUploadContext";
+import { CodeUploadContext } from "../context/CodeUploadContext";
 import { apiRegisterUser } from "../api/registerUser";
 import { apiUploadCode } from "../api/codeUpload";
+import { CodeUploadData } from "../api/types";
 
 const CustomCheckbox = ({ name, children, ...props }: {
   name: string,
@@ -59,7 +60,7 @@ export const RegisterForm = ({setForm}: {
                 codeUploadData as CodeUploadData,
                 async (codeResponse) => {
                   if (codeResponse.data?.data?.success){
-                    setForm((codeResponse.data?.won) ? "resultCodeWon" : "resultCodeDidntWin");
+                    setForm((codeResponse.data?.data?.won) ? "resultCodeWon" : "resultCodeDidntWin");
                   } else {
                     setApiError("API hiba");
                   }
@@ -121,8 +122,8 @@ export const RegisterForm = ({setForm}: {
           </CustomCheckbox>
         </div>
 
-        <div className="my-3">
-          
+        <div className="my-3 text-red-700">
+          {apiError}
         </div>
 
         <button

@@ -1,12 +1,9 @@
 import { AxiosError, AxiosResponse } from "axios";
 import axiosClient from "./axiosClient";
+import { CodeUploadData } from "./types";
 
 export const apiUploadCode = (
-  data: {
-    email: string,
-    code: string,
-    purchase_time: string
-  },
+  data: CodeUploadData,
   success: (response: AxiosResponse) => Promise<void>,
   fail: (error: AxiosError) => Promise<void>
 ) => {

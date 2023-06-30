@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { CodeUploadForm } from './CodeUploadForm';
 import { RegisterForm } from './RegisterForm';
-import { CodeUploadContext, CodeUploadData } from '../context/CodeUploadContext';
+import { CodeUploadContext } from '../context/CodeUploadContext';
 import { ResultCodeWon } from './ResultCodeWon';
 import { ResultCodeDidntWin } from './ResultCodeDidntWin';
+import { CodeUploadData } from '../api/types';
 
 export type formTypes = "codeUpload" | "registerUser" | "resultCodeWon" | "resultCodeDidntWin";
 

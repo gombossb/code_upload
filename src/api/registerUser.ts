@@ -1,11 +1,9 @@
 import { AxiosError, AxiosResponse } from "axios"
 import axiosClient from "./axiosClient";
+import { RegisterUserData } from "./types";
 
 export const apiRegisterUser = (
-  data: {
-    email: string,
-    name: string
-  },
+  data: RegisterUserData,
   success: (response: AxiosResponse) => Promise<void>,
   fail: (error: AxiosError) => Promise<void>
 ) => {

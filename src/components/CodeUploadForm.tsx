@@ -45,7 +45,7 @@ export const CodeUploadForm = ({setForm}: {
           values,
           async (response) => {
             if (response.data?.data?.success){
-              setForm((response.data?.won) ? "resultCodeWon" : "resultCodeDidntWin");
+              setForm((response.data?.data?.won) ? "resultCodeWon" : "resultCodeDidntWin");
             } else {
               setApiError("API hiba");
             }
@@ -110,7 +110,7 @@ export const CodeUploadForm = ({setForm}: {
           />
         </div>
 
-        <div className="text-red-700">
+        <div className="my-3 text-red-700">
           {apiError}
         </div>
 
