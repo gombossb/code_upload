@@ -32,9 +32,16 @@ export const CodeUploadForm = ({setForm}: {
         //     "futureTest",
         //     "A megadott idő nem lehet jövőbeli!",
         //     value => new Date(value as string) <= new Date()
-        //   )
+          // )
       })}
       onSubmit={(values) => {
+        if (new Date(values.purchase_time as string) > new Date()){
+          setApiError("A megadott idő nem lehet jövőbeli!");
+          return;
+        }
+
+        setApiError("");
+
         setCodeUploadData({
           email: values.email,
           code: values.code,
